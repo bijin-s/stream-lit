@@ -33,7 +33,7 @@ if uploaded_file is not None:
         st.session_state["preview"] += data[i]
 preview = st.text_area("CSV Preview", "", height=150, key="preview")
 upload_state = st.text_area("Upload State", "", key="upload_state")
-def upload_to_bucket(blob_name, path_to_file, bucket_name):
+def upload_to_bucket(bucket_name):
     """ Upload data to a bucket"""
      
     # Explicitly use service account credentials by specifying the private key
@@ -57,11 +57,7 @@ def upload():
         parent_path = pathlib.Path(__file__).parent.parent.resolve()           
         save_path = os.path.join(parent_path, "data")
         complete_name = os.path.join(save_path, uploaded_file.name)
-        upload_to_bucket(
-        destination_file = open(complete_name, "w")
-        destination_file.write(data)
-        destination_file.close()
-        st.session_state["upload_state"] = "Saved " + complete_name + " successfully!"
+        upload_to_bucket(bucket_name)
      
 st.button("Upload file to Sandbox", on_click=upload)
 
