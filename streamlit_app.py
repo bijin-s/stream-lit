@@ -22,6 +22,4 @@ file_path = "Only.csv"
 content = read_file(bucket_name, file_path)
 
 # Print results.
-for line in content.strip().split("\n"):
-   
-    st.write(line.split("")[0])
+st.write(content)
