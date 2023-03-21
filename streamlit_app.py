@@ -17,7 +17,7 @@ def read_file(bucket_name, file_path):
     return content
 
 bucket_name = "examplesx111"
-file_path = "Only AI -17-July -2021.xlsx"
+file_path = "Only.csv"
 
 content = read_file(bucket_name, file_path)
 
