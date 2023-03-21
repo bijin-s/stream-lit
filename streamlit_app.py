@@ -1,8 +1,4 @@
-
 import streamlit as st
-import os.path
-import pathlib
-
 from google.oauth2 import service_account
 from google.cloud import storage
 
@@ -21,7 +17,11 @@ def read_file(bucket_name, file_path):
     return content
 
 bucket_name = "streamlit-bucket"
+file_path = "myfile.csv"
 
-bucket = storage.Bucket(client, 'example-bucket-skytowner')
-# Name of the file on the GCS once uploaded
-blob = bucket.blob('uploaded_sample.txt')
+content = read_file(bucket_name, file_path)
+
+# Print results.
+for line in content.strip().split("\n"):
+    name, pet = line.split(",")
+    st.write(f"{name} has a :{pet}:")
