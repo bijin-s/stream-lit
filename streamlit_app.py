@@ -49,10 +49,7 @@ def upload():
     if uploaded_file is None:
         st.session_state["upload_state"] = "Upload a file first!"
     else:
-        data = uploaded_file.getvalue().decode('utf-8')
-        parent_path = pathlib.Path(__file__).parent.parent.resolve()           
-        save_path = os.path.join(parent_path, "data")
-        complete_name = os.path.join(save_path, uploaded_file.name)
+       
         upload_to_bucket(bucket_name)
      
 st.button("Upload file to Sandbox", on_click=upload)
