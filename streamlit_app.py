@@ -25,5 +25,3 @@ bucket_name = "streamlit-bucket"
 bucket = storage.Bucket(client, 'example-bucket-skytowner')
 # Name of the file on the GCS once uploaded
 blob = bucket.blob('uploaded_sample.txt')
-# Path of the local file
-blob.upload_from_filename('sample.txt')
