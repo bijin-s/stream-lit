@@ -21,36 +21,9 @@ def read_file(bucket_name, file_path):
     return content
 
 bucket_name = "streamlit-bucket"
-st.write("""
-# File Picker
-""")
-uploaded_file = st.file_uploader("Choose a CSV file")
-if uploaded_file is not None:
-    bytes_data = uploaded_file.getvalue()
-preview = st.text_area("CSV Preview", "", height=150, key="preview")
-upload_state = st.text_area("Upload State", "", key="upload_state")
-def upload_to_bucket(bucket_name):
-    """ Upload data to a bucket"""
-     
-    # Explicitly use service account credentials by specifying the private key
-    # file.
-    storage_client = storage.Client.from_service_account_json(
-        'creds.json')
 
-    #print(buckets = list(storage_client.list_buckets())
-    bucket = storage.Bucket(client, 'example-bucket-skytowner')
-
-    blob = bucket.blob('uploaded_sample.csv')
-    blob.upload_from_filename('sample.csv')
-    
-    #returns a public url
-    return blob.public_url
-def upload():
-    if uploaded_file is None:
-        st.session_state["upload_state"] = "Upload a file first!"
-    else:
-       
-        upload_to_bucket(bucket_name)
-     
-st.button("Upload file to Sandbox", on_click=upload)
-
+bucket = storage.Bucket(client, 'example-bucket-skytowner')
+# Name of the file on the GCS once uploaded
+blob = bucket.blob('uploaded_sample.txt')
+# Path of the local file
+blob.upload_from_filename('sample.txt')
