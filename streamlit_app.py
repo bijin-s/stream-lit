@@ -1,25 +1,27 @@
 import streamlit as st
+from google.cloud import firestore
 from google.oauth2 import service_account
-from google.cloud import storage
+import json
+key_dict = json.loads(st.secrets["textkey"])
+creds = service_account.Credentials.from_service_account_info(key_dict)
+db = firestore.Client(credentials=creds, project="streamlit-reddit")
 
-# Create API client.
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"]
-)
-client = storage.Client(credentials=credentials)
+# Streamlit widgets to let a user create a new post
+title = st.text_input("Post title")
+url = st.text_input("Post url")
+submit = st.button("Submit new post")
 
-# Retrieve file contents.
-# Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data(ttl=600)
-def read_file(bucket_name, file_path):
-    bucket = client.bucket(bucket_name)
-    content = bucket.blob(file_path).download_as_string()
-    return content
+# Once the user has submitted, upload it to the database
+if title and url and submit:
+	doc_ref = db.collection("files").document(title)
+	doc_ref.set({
+		"title": title,
+		"url": url
+	})
 
-bucket_name = "examplesx111"
-file_path = "Only.csv"
-
-content = read_file(bucket_name, file_path)
-
-# Print results.
-st.write(content)
+# And then render each post, using some light Markdown
+posts_ref = db.collection("files")
+for doc in posts_ref.stream():
+	post = doc.to_dict()
+	
+	st.write(f"object {post}")
